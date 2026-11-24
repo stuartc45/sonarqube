@@ -1,0 +1,53 @@
+SONARQUBE LAB
+
+Project: C:\Users\stura\Downloads\files\sonarqube
+Repository: https://github.com/stuartc45/sonarqube
+Cloud: https://sonarcloud.io/summary/overall?id=stuartc45_sonarqube&branch=main
+Organization: stuartc45
+Project key: stuartc45_sonarqube
+
+IMPLEMENTATION
+CustomFileReader opens a fresh UTF-8 scanner for each operation and closes it
+with try-with-resources. Word counts reset on each call. Missing files propagate
+to Main for a clear console error. Sentence construction uses StringBuilder.
+Equality and hashing use the file path, sentence text, and word count.
+Main validates its arguments and uses locale-independent case conversion.
+Only the tutorial-permitted rules S106 and S1166 are suppressed in Main.
+
+BUILD AND RUN
+Use IntelliJ's Maven tool window > Lifecycle > install, or run:
+  mvn clean install
+The project produces Java 11 bytecode and was tested with Java 21.
+All 27 tests pass. JaCoCo HTML/XML reports are under target/site/jacoco.
+Coverage checks require at least 80% for both lines and branches.
+The shared run configuration is Sonar lab Main, with arguments:
+  readMe1.txt readMe2.txt readMe3.txt 5
+Run from the project root. Each file restarts on every read, as in the tutorial.
+
+CLOUD ANALYSIS
+Pushing to main runs .github/workflows/build.yml. It builds and tests the project,
+then runs the Maven scanner and waits for the Cloud quality gate. Authentication
+uses the GitHub Actions repository secret SONAR_TOKEN. Keep the token out of
+source files. Local Maven builds do not upload an analysis unless sonar:sonar
+is explicitly requested.
+
+INTELLIJ INSPECTIONS
+Code > Analyze Code > Inspect Code checks the Java source and tests under src.
+The full project inspection also checks documentation and sample input text;
+proofreading suggestions about names, configuration keys, and the supplied
+literary excerpt are unrelated to Java code correctness.
+Use Find Action and search Analyze All Files with SonarQube for IDE to refresh
+the complete Sonar report. Review its Report tab after analysis finishes.
+No new rule suppressions were added to silence inspections.
+
+CANVAS SUBMISSION CHECKLIST
+The Canvas assignment page specifies:
+- Main.java
+- CustomFileReader.java
+- MainTest.java and CustomFileReaderTest.java, because both were modified
+- A screenshot of IntelliJ's static analyzer finding no suspicious code
+- A screenshot of the SonarLint report (one information-level issue is allowed)
+- A screenshot of the passing SonarQube Cloud quality gate
+Canvas accepts Java, PDF, JPG, PNG, TIF, and GIF files.
+The submission folder is C:\Users\stura\OneDrive\Desktop\hw4\sonar-lab-submission.
+Upload the four Java files and three PNG images individually.

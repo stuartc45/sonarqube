@@ -3,6 +3,9 @@ package edu.byu.cs.sonar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -110,17 +114,28 @@ class CustomFileReaderTest {
     }
 
     @Test
-    void equalityIsReflexiveSymmetricAndNullSafe() {
+    void equalityIsSymmetricAndTransitive() {
         CustomFileReader same = new CustomFileReader("readMe1.txt");
         CustomFileReader third = new CustomFileReader("readMe1.txt");
-        assertEquals(sut, sut);
         assertEquals(sut, same);
         assertEquals(same, sut);
         assertEquals(same, third);
         assertEquals(sut, third);
-        assertFalse(sut.equals(null));
-        assertFalse(sut.equals("readMe1.txt"));
         assertEquals(sut.hashCode(), same.hashCode());
+    }
+
+    @ParameterizedTest
+    @MethodSource("equalityEdgeCases")
+    void checksEqualityEdgeCases(CustomFileReader first, Object second, boolean expected) {
+        assertEquals(expected, first.equals(second));
+    }
+
+    private static Stream<Arguments> equalityEdgeCases() {
+        CustomFileReader reader = new CustomFileReader("readMe1.txt");
+        return Stream.of(
+                Arguments.of(reader, reader, true),
+                Arguments.of(reader, null, false),
+                Arguments.of(reader, "readMe1.txt", false));
     }
 
     @Test

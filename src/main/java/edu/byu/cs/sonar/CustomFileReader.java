@@ -11,7 +11,7 @@ import java.util.Scanner;
 /** Reads UTF-8 files and builds a sentence from matching words. */
 final class CustomFileReader {
     private final String path;
-    private String newSentence = "";
+    private final StringBuilder newSentence = new StringBuilder();
     private int count;
 
     CustomFileReader(final String fileName) {
@@ -56,7 +56,7 @@ final class CustomFileReader {
             while (scanner.hasNext()) {
                 String word = scanner.next();
                 if (word.contains(letter)) {
-                    newSentence += word + " ";
+                    newSentence.append(word).append(' ');
                     return;
                 }
             }
@@ -65,16 +65,17 @@ final class CustomFileReader {
     }
 
     String getNewSentence() {
-        return newSentence;
+        return newSentence.toString();
     }
 
     void setNewSentence(final String betterSentence) {
-        newSentence = Objects.requireNonNull(betterSentence, "Sentence must not be null");
+        newSentence.replace(0, newSentence.length(),
+                Objects.requireNonNull(betterSentence, "Sentence must not be null"));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(path, newSentence, count);
+        return Objects.hash(path, newSentence.toString(), count);
     }
 
     @Override
@@ -93,6 +94,6 @@ final class CustomFileReader {
         CustomFileReader comparedReader = (CustomFileReader) object;
         return count == comparedReader.count
                 && path.equals(comparedReader.path)
-                && newSentence.equals(comparedReader.newSentence);
+                && newSentence.toString().contentEquals(comparedReader.newSentence);
     }
 }
