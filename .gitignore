@@ -1,0 +1,9 @@
+/target/
+/.idea/
+*.iml
+/.maven-cache/
+/lab-reference/
+*.log
+/.sonar/
+/.scannerwork/
+.env
